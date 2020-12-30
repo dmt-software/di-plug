@@ -1,0 +1,25 @@
+supported:
+  Aura\Di\Container:
+    adapter: DMT\DependencyInjection\Adapters\AuraAdapter
+    resolver: DMT\DependencyInjection\Resolvers\Resolver
+  Aura\Di\ContainerBuilder:
+    adapter: DMT\DependencyInjection\Adapters\AuraAdapter
+    resolver: DMT\DependencyInjection\Resolvers\FactoryResolver
+    accessor: newInstance
+  Pimple\Container:
+    adapter: DMT\DependencyInjection\Adapters\PimpleAdapter
+    resolver: DMT\DependencyInjection\Resolvers\Resolver
+  Pimple\Psr11\Container:
+    adapter: DMT\DependencyInjection\Adapters\PimpleAdapter
+    resolver: DMT\DependencyInjection\Resolvers\PropertyResolver
+    accessor: pimple
+detectors:
+  DMT\DependencyInjection\Detectors\InstanceOfDetector:
+    supported:
+      - Aura\Di\Container
+      - Pimple\Container
+      - Pimple\Psr11\Container
+  DMT\DependencyInjection\Detectors\InstalledClassDetector:
+    supported:
+      - Aura\Di\ContainerBuilder
+      - Pimple\Container
