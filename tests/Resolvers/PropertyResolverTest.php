@@ -1,6 +1,6 @@
 <?php
 
-namespace DMT\Test\DependencyInjection\Resolver;
+namespace DMT\Test\DependencyInjection\Resolvers;
 
 use DMT\DependencyInjection\Resolvers\PropertyResolver;
 use DMT\Test\DependencyInjection\Fixtures\DummyContainer;

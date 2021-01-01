@@ -30,4 +30,9 @@ class DummyPsrContainer implements ContainerInterface
     {
         return $this->container->exists($id);
     }
+
+    public function getInnerContainer(): object
+    {
+        return $this->container;
+    }
 }
