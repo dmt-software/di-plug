@@ -6,6 +6,11 @@ use stdClass;
 
 class DummyContainer
 {
+    public function add(string $id, $value): void
+    {
+
+    }
+
     public function get(string $id): object
     {
         return new stdClass();

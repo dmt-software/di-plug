@@ -14,9 +14,9 @@ composer require dmt-software/di-plug
 ### Manual set a container
 ```php
 use DMT\DependencyInjection\Container;
-use Pimple\Pimple;
+use Pimple\Container as PimpleContainer;
  
-$containeer = new Container(new Pimple());
+$containeer = new Container(new PimpleContainer());
 $containeer->set(SomeClass::class, function () {
     return new SomeClass($this->get(SomeDependency::class));
 });
