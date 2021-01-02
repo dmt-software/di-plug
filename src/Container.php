@@ -7,6 +7,7 @@ use DMT\DependencyInjection\Adapters\Adapter;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use SebastianBergmann\CodeUnit\FunctionUnit;
 
 /**
  * Class Container
@@ -60,5 +61,15 @@ class Container implements ContainerInterface
     public function has($id)
     {
         return $this->adapter->has($id);
+    }
+
+    /**
+     * Register dependencies by a service provider.
+     *
+     * @param ServiceProviderInterface $provider
+     */
+    public function register(ServiceProviderInterface $provider): void
+    {
+        $provider->register($this);
     }
 }

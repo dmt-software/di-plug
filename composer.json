@@ -1,6 +1,6 @@
 {
     "name": "dmt-software/di-plug",
-    "description": "PHP dependency container",
+    "description": "An PHP dependency container abstraction",
     "type": "library",
     "license": "MIT",
     "authors": [
