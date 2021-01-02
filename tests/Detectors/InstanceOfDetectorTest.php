@@ -5,7 +5,6 @@ namespace DMT\Test\DependencyInjection\Detectors;
 use DMT\DependencyInjection\Adapters\PimpleAdapter;
 use DMT\DependencyInjection\Config\ContainerConfig;
 use DMT\DependencyInjection\Config\ContainerConfigList;
-use DMT\DependencyInjection\Detectors\InstalledClassDetector;
 use DMT\DependencyInjection\Detectors\InstanceOfDetector;
 use DMT\DependencyInjection\Resolvers\ClassResolver;
 use DMT\Test\DependencyInjection\Fixtures\DummyAdapter;
@@ -24,7 +23,7 @@ class InstanceOfDetectorTest extends TestCase
         $list->append($config);
         $list->append($pimple);
 
-        $detector = new InstalledClassDetector($list);
+        $detector = new InstanceOfDetector($list);
         $this->assertSame($config, $detector->detect(new DummyContainer()));
     }
 
@@ -33,7 +32,7 @@ class InstanceOfDetectorTest extends TestCase
         $list = new ContainerConfigList([]);
         $list->append(new ContainerConfig('__missing_class__', ClassResolver::class, DummyAdapter::class));
 
-        $detector = new InstalledClassDetector($list);
+        $detector = new InstanceOfDetector($list);
         $this->assertNull($detector->detect(new DummyContainer()));
     }
 }

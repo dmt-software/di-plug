@@ -15,4 +15,13 @@ class PublicMethodResolverTest extends TestCase
 
         $this->assertInstanceOf(DummyContainer::class, $resolver->resolve());
     }
+
+    public function testResolveFailure()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $resolver = new PublicMethodResolver(new DummyPsrContainer(new DummyContainer()), 'getContainer');
+
+        $this->assertInstanceOf(DummyContainer::class, $resolver->resolve());
+    }
 }

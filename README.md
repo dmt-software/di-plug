@@ -2,8 +2,9 @@
 
 ## Introduction
 [psr-11](https://www.php-fig.org/psr/psr-11/) introduced a standardized way for packages, libraries and frameworks to
-retrieve objects from containers. This package also allows adding dependencies to a container by a uniform interface.
-Its goal is to help package developers to access the dependency container to make installation more easy.
+retrieve objects from containers. This package also allows adding dependencies to a container by a uniform interface
+without the use of a specific container implementation. This will help developers to access the dependency injection
+container to make installation of their packages more easy.
 
 ## Installation
 ```bash
@@ -11,12 +12,13 @@ composer require dmt-software/di-plug
 ```
 ## Usage
 
-### Manual set a container
+### Manual create the container
 ```php
+use DMT\DependencyInjection\Adapters\PimpleAdapter;
 use DMT\DependencyInjection\Container;
 use Pimple\Container as PimpleContainer;
  
-$containeer = new Container(new PimpleContainer());
+$containeer = new Container(new PimpleAdapter(new PimpleContainer()));
 $containeer->set(SomeClass::class, function () {
     return new SomeClass($this->get(SomeDependency::class));
 });
