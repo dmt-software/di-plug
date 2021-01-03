@@ -4,6 +4,8 @@ namespace DMT\Test\DependencyInjection\Adapters;
 
 use DMT\DependencyInjection\Adapters\Adapter;
 use DMT\DependencyInjection\Container;
+use Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -33,6 +35,37 @@ abstract class AdapterTest extends TestCase
      * @return ContainerInterface
      */
     abstract protected function getContainer(): ContainerInterface;
+
+    /**
+     * Get a mocked container.
+     *
+     * @param string $container
+     * @param string $method
+     * @param mixed $returnValue
+     *
+     * @return MockObject
+     */
+    protected function getMockedContainer(string $container, string $method, $returnValue)
+    {
+        $container = $this->getMockBuilder($container)
+            ->disableOriginalConstructor()
+            ->onlyMethods([$method])
+            ->getMock();
+
+        if ($returnValue instanceof Exception) {
+            $container
+                ->expects($this->any())
+                ->method($method)
+                ->willThrowException($returnValue);
+        } else {
+            $container
+                ->expects($this->any())
+                ->method($method)
+                ->willReturn($returnValue);
+        }
+
+        return $container;
+    }
 
     /**
      * Get te adapter to use.

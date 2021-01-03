@@ -9,8 +9,8 @@ use DMT\DependencyInjection\Exceptions\NotFoundException;
 use DMT\DependencyInjection\Exceptions\UnavailableException;
 use DMT\DependencyInjection\Exceptions\UnresolvedException;
 use Exception;
+use ReflectionException;
 use ReflectionProperty;
-use RuntimeException;
 
 /**
  * Class AuraAdapter
@@ -79,16 +79,12 @@ final class AuraAdapter extends Adapter
     /**
      * Unlock the container to allow a new set of dependencies.
      *
-     * @throws RuntimeException
+     * @throws ReflectionException
      */
     protected function unlock(): void
     {
-        try {
-            $reflectionProperty = new ReflectionProperty($this->container, 'locked');
-            $reflectionProperty->setAccessible(true);
-            $reflectionProperty->setValue($this->container, false);
-        } catch (Exception $exception) {
-            throw new RuntimeException('container is locked');
-        }
+        $reflectionProperty = new ReflectionProperty($this->container, 'locked');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->container, false);
     }
 }
