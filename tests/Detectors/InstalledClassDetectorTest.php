@@ -24,7 +24,7 @@ class InstalledClassDetectorTest extends TestCase
         $list->append($pimple);
 
         $detector = new InstalledClassDetector($list);
-        $this->assertSame($config, $detector->detect(null));
+        $this->assertEquals($config, $detector->detect(null));
     }
 
     public function testDetectNothing()

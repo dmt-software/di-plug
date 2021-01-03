@@ -2,8 +2,9 @@
 
 namespace DMT\DependencyInjection\Detectors;
 
-use DMT\DependencyInjection\Adapters\Adapter;
 use DMT\DependencyInjection\Config\ContainerConfig;
+use DMT\DependencyInjection\Resolvers\ClassResolver;
+use DMT\DependencyInjection\Resolvers\FactoryResolver;
 use Iterator;
 
 /**
@@ -37,6 +38,11 @@ final class InstalledClassDetector implements DetectorInterface
     {
         foreach ($this->supportedContainers as $supportedContainer) {
             if (class_exists($supportedContainer->className)) {
+                if (!$supportedContainer->resolver instanceof FactoryResolver) {
+                    $supportedContainer = clone($supportedContainer);
+                    $supportedContainer->resolver = ClassResolver::class;
+                }
+
                 return $supportedContainer;
             }
         }

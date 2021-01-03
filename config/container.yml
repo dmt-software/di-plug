@@ -6,6 +6,9 @@ supported:
     adapter: DMT\DependencyInjection\Adapters\AuraAdapter
     resolver: DMT\DependencyInjection\Resolvers\FactoryResolver
     accessor: newInstance
+  DI\Container:
+    adapter: DMT\DependencyInjection\Adapters\PhpDiAdapter
+    resolver: DMT\DependencyInjection\Resolvers\Resolver
   Pimple\Container:
     adapter: DMT\DependencyInjection\Adapters\PimpleAdapter
     resolver: DMT\DependencyInjection\Resolvers\Resolver
@@ -17,9 +20,11 @@ detectors:
   DMT\DependencyInjection\Detectors\InstanceOfDetector:
     supported:
       - Aura\Di\Container
+      - DI\Container
       - Pimple\Container
       - Pimple\Psr11\Container
   DMT\DependencyInjection\Detectors\InstalledClassDetector:
     supported:
       - Aura\Di\ContainerBuilder
+      - DI\Container
       - Pimple\Container

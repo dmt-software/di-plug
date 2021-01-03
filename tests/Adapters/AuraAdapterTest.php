@@ -13,6 +13,7 @@ use DMT\DependencyInjection\Exceptions\UnavailableException;
 use DMT\DependencyInjection\Exceptions\UnresolvedException;
 use Exception;
 use Psr\Container\ContainerInterface;
+use ReflectionProperty;
 
 class AuraAdapterTest extends AdapterTest
 {
@@ -29,7 +30,7 @@ class AuraAdapterTest extends AdapterTest
 
         $container = $this->getMockedContainer(AuraContainer::class, $method, $returnValue);
 
-        $reflectionProperty = new \ReflectionProperty(AuraContainer::class, 'injectionFactory');
+        $reflectionProperty = new ReflectionProperty(AuraContainer::class, 'injectionFactory');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(
             $container,

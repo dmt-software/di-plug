@@ -6,8 +6,6 @@ use DMT\DependencyInjection\Adapters\Adapter;
 use DMT\DependencyInjection\Config\ContainerConfig;
 use DMT\DependencyInjection\Config\ContainerConfigList;
 use DMT\DependencyInjection\Detectors\DetectorList;
-use DMT\DependencyInjection\Resolvers\ClassResolver;
-use DMT\DependencyInjection\Resolvers\FactoryResolver;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -66,23 +64,17 @@ final class ContainerFactory
     protected function getAdapter(ContainerConfig $config, object $containerInstance = null): Adapter
     {
         $adapter = $config->adapter;
+        $resolver = $config->resolver;
 
-        if ($config->resolver === FactoryResolver::class) {
-            $resolver = new FactoryResolver($config->className, $config->accessor);
-            return new $adapter($resolver->resolve());
-        }
-
-        $resolver = new ClassResolver($config->className);
+        $arguments = [];
         if ($containerInstance) {
-            $resolver = $config->resolver;
-
             $arguments = [$containerInstance];
             if ($config->accessor) {
                 $arguments[] = $config->accessor;
             }
-
-            $resolver = new $resolver(...$arguments);
         }
+
+        $resolver = new $resolver(...$arguments);
 
         return new $adapter($resolver->resolve());
     }

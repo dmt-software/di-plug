@@ -38,4 +38,5 @@ $container->set(SomeClass::class, function () {
 
 ## Supports
  - [Aura dependency injection container](https://packagist.org/packages/aura/di)
+ - [PHP-DI container](https://packagist.org/packages/php-di/php-di)
  - [Pimple container](https://packagist.org/packages/pimple/pimple)

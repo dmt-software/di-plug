@@ -17,7 +17,8 @@
     "require": {
         "php": ">=7.4",
         "psr/container": "^1.0",
-        "symfony/yaml": "^5.2"
+        "symfony/yaml": "^5.2",
+        "php-di/php-di": "^6.3"
     },
     "autoload-dev": {
         "psr-4": {
