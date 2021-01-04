@@ -28,6 +28,7 @@
         "phpunit/phpunit": ">=7.5",
         "aura/di": "^4.1",
         "php-di/php-di": "^6.3",
-        "pimple/pimple": "^3.3"
+        "pimple/pimple": "^3.3",
+        "league/container": "^3.3"
     }
 }

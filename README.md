@@ -18,13 +18,13 @@ use DMT\DependencyInjection\Adapters\PimpleAdapter;
 use DMT\DependencyInjection\Container;
 use Pimple\Container as PimpleContainer;
  
-$containeer = new Container(new PimpleAdapter(new PimpleContainer()));
-$containeer->set(SomeClass::class, function () {
+$container = new Container(new PimpleAdapter(new PimpleContainer()));
+$container->set(SomeClass::class, function () {
     return new SomeClass($this->get(SomeDependency::class));
 });
 ````
 
-### Autodetect a container
+### Autodetect
 ```php
 use DMT\DependencyInjection\ContainerFactory;
  
@@ -38,5 +38,6 @@ $container->set(SomeClass::class, function () {
 
 ## Supports
  - [Aura dependency injection container](https://packagist.org/packages/aura/di)
+ - [League container](https://packagist.org/packages/league/container)
  - [PHP-DI container](https://packagist.org/packages/php-di/php-di)
  - [Pimple container](https://packagist.org/packages/pimple/pimple)
