@@ -9,6 +9,12 @@ supported:
   DI\Container:
     adapter: DMT\DependencyInjection\Adapters\PhpDiAdapter
     resolver: DMT\DependencyInjection\Resolvers\Resolver
+  Illuminate\Container\Container:
+    adapter: DMT\DependencyInjection\Adapters\IlluminateAdapter
+    resolver: DMT\DependencyInjection\Resolvers\Resolver
+  League\Container\Container:
+    adapter: DMT\DependencyInjection\Adapters\LeagueAdapter
+    resolver: DMT\DependencyInjection\Resolvers\Resolver
   Pimple\Container:
     adapter: DMT\DependencyInjection\Adapters\PimpleAdapter
     resolver: DMT\DependencyInjection\Resolvers\Resolver
@@ -21,10 +27,14 @@ detectors:
     supported:
       - Aura\Di\Container
       - DI\Container
+      - Illuminate\Container\Container
+      - League\Container\Container
       - Pimple\Container
       - Pimple\Psr11\Container
   DMT\DependencyInjection\Detectors\InstalledClassDetector:
     supported:
       - Aura\Di\ContainerBuilder
       - DI\Container
+      - Illuminate\Container\Container
+      - League\Container\Container
       - Pimple\Container

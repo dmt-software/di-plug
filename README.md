@@ -38,6 +38,7 @@ $container->set(SomeClass::class, function () {
 
 ## Supports
  - [Aura dependency injection container](https://packagist.org/packages/aura/di)
+ - [Illuminate container](https://packagist.org/packages/illuminate/container)
  - [League container](https://packagist.org/packages/league/container)
  - [PHP-DI container](https://packagist.org/packages/php-di/php-di)
  - [Pimple container](https://packagist.org/packages/pimple/pimple)

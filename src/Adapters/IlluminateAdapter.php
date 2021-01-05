@@ -7,22 +7,23 @@ use DMT\DependencyInjection\Exceptions\NotFoundException;
 use DMT\DependencyInjection\Exceptions\UnavailableException;
 use DMT\DependencyInjection\Exceptions\UnresolvedException;
 use Exception;
-use League\Container\Container;
-use League\Container\Exception\NotFoundException as LeagueNotFoundException;
+use Illuminate\Container\Container;
+use Illuminate\Container\EntryNotFoundException;
 
 /**
- * Class LeagueAdapter
+ * Class IlluminateAdapter
  *
- * @see https://github.com/thephpleague/container
+ * @see https://github.com/illuminate/container
  *
  * @package DMT\DependencyInjection\Adapters
  */
-class LeagueAdapter extends Adapter
+class IlluminateAdapter extends Adapter
 {
     private Container $container;
 
     /**
-     * LeagueAdapter constructor.
+     * IlluminateAdapter constructor.
+     *
      * @param Container $container
      */
     public function __construct(Container $container)
@@ -31,8 +32,12 @@ class LeagueAdapter extends Adapter
     }
 
     /**
+     * Store dependency in container.
+     *
      * @param string $id
      * @param Closure $value
+     *
+     * @throws UnresolvedException
      */
     public function set(string $id, Closure $value): void
     {
@@ -40,18 +45,23 @@ class LeagueAdapter extends Adapter
             UnavailableException::throwException($id);
         }
 
-        $this->container->add($id, $value->bindTo($this));
+        $this->container->bind($id, $value->bindTo($this));
     }
 
     /**
+     * Get dependency from container.
+     *
      * @param string $id
-     * @return mixed
+     * @return object
+     *
+     * @throws NotFoundException
+     * @throws UnresolvedException
      */
     public function get($id)
     {
         try {
             return $this->container->get($id);
-        } catch (LeagueNotFoundException $exception) {
+        } catch (EntryNotFoundException $exception) {
             NotFoundException::throwException($id, $exception);
         } catch (Exception $exception) {
             UnresolvedException::throwException($id, $exception);
@@ -59,6 +69,8 @@ class LeagueAdapter extends Adapter
     }
 
     /**
+     * Check if dependency is set.
+     *
      * @param string $id
      * @return bool
      */
