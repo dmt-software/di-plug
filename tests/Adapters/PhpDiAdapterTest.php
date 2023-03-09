@@ -24,7 +24,7 @@ class PhpDiAdapterTest extends AdapterTest
      * @param mixed $returnValue
      * @param string $expected
      */
-    public function testExceptions(string $method, $returnValue, string $expected)
+    public function testExceptions(string $method, mixed $returnValue, string $expected)
     {
         $this->expectException($expected);
 
@@ -40,7 +40,6 @@ class PhpDiAdapterTest extends AdapterTest
         $container = $this->getMockedContainer(PhpDiContainer::class, $method, $returnValue);
 
         $reflectionProperty = new ReflectionProperty(PhpDiContainer::class, 'definitionSource');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($container, $definitionSource);
 
 

@@ -34,5 +34,6 @@ class InstalledClassDetectorTest extends TestCase
 
         $detector = new InstalledClassDetector($list);
         $this->assertNull($detector->detect(null));
+        $this->assertNull($detector->detect(new DummyContainer()));
     }
 }

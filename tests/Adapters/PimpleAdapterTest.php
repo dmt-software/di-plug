@@ -21,7 +21,7 @@ class PimpleAdapterTest extends AdapterTest
      * @param mixed $returnValue
      * @param string $expected
      */
-    public function testExceptions(string $method, $returnValue, string $expected)
+    public function testExceptions(string $method, mixed $returnValue, string $expected)
     {
         $this->expectException($expected);
 

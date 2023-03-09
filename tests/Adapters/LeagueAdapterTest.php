@@ -24,7 +24,7 @@ class LeagueAdapterTest extends AdapterTest
      * @param mixed $returnValue
      * @param string $expected
      */
-    public function testExceptions(string $method, $returnValue, string $expected)
+    public function testExceptions(string $method, mixed $returnValue, string $expected)
     {
         $this->expectException($expected);
 
@@ -32,7 +32,6 @@ class LeagueAdapterTest extends AdapterTest
         $container = $this->getMockedContainer(LeagueContainer::class, $method, $returnValue);
 
         $reflectionProperty = new ReflectionProperty(LeagueContainer::class, 'definitions');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(
             $container,
             $this->getMockBuilder(DefinitionAggregate::class)
@@ -40,7 +39,6 @@ class LeagueAdapterTest extends AdapterTest
         );
 
         $reflectionProperty = new ReflectionProperty(LeagueContainer::class, 'providers');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(
             $container,
             $this->getMockBuilder(ServiceProviderAggregate::class)

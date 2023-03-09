@@ -24,14 +24,13 @@ class AuraAdapterTest extends AdapterTest
      * @param mixed $returnValue
      * @param string $expected
      */
-    public function testExceptions(string $method, $returnValue, string $expected)
+    public function testExceptions(string $method, mixed $returnValue, string $expected)
     {
         $this->expectException($expected);
 
         $container = $this->getMockedContainer(AuraContainer::class, $method, $returnValue);
 
         $reflectionProperty = new ReflectionProperty(AuraContainer::class, 'injectionFactory');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(
             $container,
             $this->getMockBuilder(InjectionFactory::class)

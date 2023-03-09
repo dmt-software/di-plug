@@ -8,8 +8,13 @@ use DMT\DependencyInjection\Adapters\PimpleAdapter;
 use DMT\DependencyInjection\Container;
 use DMT\DependencyInjection\ContainerFactory;
 use DMT\DependencyInjection\Detectors\InstalledClassDetector;
+use DMT\DependencyInjection\Resolvers\ClassResolver;
+use DMT\DependencyInjection\Resolvers\FactoryResolver;
 use DMT\DependencyInjection\Resolvers\Resolver;
+use DMT\Test\DependencyInjection\Fixtures\DummyAdapter;
+use DMT\Test\DependencyInjection\Fixtures\DummyContainer;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class ContainerFactoryTest extends TestCase
 {
@@ -44,7 +49,7 @@ class ContainerFactoryTest extends TestCase
             'detectors' => [
                 InstalledClassDetector::class => [
                     'supported' => [
-                        \Pimple\Container::class
+                        \Pimple\Container::class,
                     ]
                 ]
             ],
@@ -53,5 +58,66 @@ class ContainerFactoryTest extends TestCase
 
         $this->assertInstanceOf(Container::class, $container);
         $this->assertTrue(class_exists(PimpleAdapter::class, false));
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testAutodetectFromFactory()
+    {
+        $this->assertFalse(class_exists(AuraAdapter::class, false));
+
+        $factory = new ContainerFactory([
+            'supported' => [
+                \Aura\Di\ContainerBuilder::class => [
+                    'adapter' => AuraAdapter::class,
+                    'resolver' => FactoryResolver::class,
+                    'accessor' => 'newInstance',
+                ]
+            ],
+            'detectors' => [
+                InstalledClassDetector::class => [
+                    'supported' => [
+                        \Aura\Di\ContainerBuilder::class,
+                    ]
+                ]
+            ],
+        ]);
+        $container = $factory->createContainer();
+
+        $this->assertInstanceOf(Container::class, $container);
+        $this->assertTrue(class_exists(AuraAdapter::class, false));
+    }
+
+    /**
+     * @dataProvider provideUnsupportedContainer
+     */
+    public function testUnsupportedContainer(?array $configuration, ?object $container = null)
+    {
+        $this->expectExceptionObject(new RuntimeException('Unsupported container'));
+
+        (new ContainerFactory($configuration))->createContainer($container);
+    }
+
+    public function provideUnsupportedContainer(): iterable
+    {
+        return [
+            'object not in configuration' => [[], new \Pimple\Container()],
+            'auto discover class not found' => [
+                [
+                    'support' => [
+                        DummyContainer::class => [
+                            'adapter' => DummyAdapter::class,
+                            'resolver' => ClassResolver::class,
+                        ]
+                    ],
+                    'detectors' => [
+                        InstalledClassDetector::class => [
+                            DummyContainer::class,
+                        ]
+                    ]
+                ],
+            ],
+        ];
     }
 }

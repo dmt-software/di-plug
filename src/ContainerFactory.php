@@ -83,7 +83,7 @@ final class ContainerFactory
     public function __construct(array $configuration = self::DEFAULT_CONFIGURATION)
     {
         $this->supportedContainers = new ContainerConfigList($configuration['supported'] ?? []);
-        $this->containerDetectors = new DetectorList($configuration['detectors'], $this->supportedContainers);
+        $this->containerDetectors = new DetectorList($configuration['detectors'] ?? [], $this->supportedContainers);
     }
 
     public function createContainer(object $containerInstance = null): Container
@@ -104,12 +104,7 @@ final class ContainerFactory
         $adapter = $config->adapter;
         $resolver = $config->resolver;
 
-        $arguments = [$containerInstance];
-
-        if (!$containerInstance) {
-            $arguments = [$config->className];
-        }
-
+        $arguments = [$containerInstance ?? $config->className];
         if ($config->accessor) {
             $arguments[] = $config->accessor;
         }
