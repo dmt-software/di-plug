@@ -19,7 +19,7 @@ use DMT\DependencyInjection\Container;
 use Pimple\Container as PimpleContainer;
  
 $container = new Container(new PimpleAdapter(new PimpleContainer()));
-$container->set(SomeClass::class, fn () => new SomeClass($container->get(SomeDependency::class)));
+$container->set(SomeClass::class, fn() => new SomeClass($container->get(SomeDependency::class)));
 ````
 
 ### Autodetect
@@ -29,7 +29,7 @@ use DMT\DependencyInjection\ContainerFactory;
 /** @var object|null $fromContainerInstanceOrNull */
 $factory = new ContainerFactory();
 $container = $factory->createContainer($fromContainerInstanceOrNull);
-$container->set(SomeClass::class, fn () => new SomeClass($container->get(SomeDependency::class)));
+$container->set(SomeClass::class, fn() => new SomeClass($container->get(SomeDependency::class)));
 ````
 
 ## Supports
