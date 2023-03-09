@@ -4,10 +4,13 @@ namespace DMT\DependencyInjection;
 
 use Closure;
 use DMT\DependencyInjection\Adapters\Adapter;
+use DMT\DependencyInjection\Exceptions\UnresolvedException;
+use DMT\DependencyInjection\Traits\HasContainer;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
-use SebastianBergmann\CodeUnit\FunctionUnit;
+use ReflectionClass;
+use RuntimeException;
+use Throwable;
 
 class Container implements ContainerInterface
 {
@@ -31,13 +34,34 @@ class Container implements ContainerInterface
      * Find an entry in container.
      *
      * @param string $id
+     * @param mixed ...$args
      * @return mixed
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function get(string $id)
+    public function get(string $id, mixed...$args)
     {
-        return $this->adapter->get($id);
+        $dependency = call_user_func(
+            function () use ($id, $args) {
+                if (class_exists($id) && (count($args) || !$this->has($id))) {
+                    return $this->getInstance($id, ...$args);
+                }
+
+                return $this->adapter->get($id);
+            }
+        );
+
+        if (is_object($dependency)) {
+            foreach (class_uses($dependency) as $trait) {
+                $traits = class_uses($trait) + [$trait];
+                if (in_array(HasContainer::class, $traits)) {
+                    /** @var HasContainer $dependency */
+                    $dependency->setContainer($this);
+                }
+            }
+        }
+
+        return $dependency;
     }
 
     /**
@@ -59,5 +83,28 @@ class Container implements ContainerInterface
     public function register(ServiceProviderInterface $provider): void
     {
         $provider->register($this);
+    }
+
+    /**
+     * Get in instance of a class
+     *
+     * @param string $className
+     * @param mixed ...$constructorArgs
+     *
+     * @return object
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
+    private function getInstance(string $className, mixed...$constructorArgs): object
+    {
+        try {
+            $class = new ReflectionClass($className);
+            if (!$class->isInstantiable()) {
+                throw new RuntimeException('can not instantiate class');
+            }
+
+            return $class->newInstance(...$constructorArgs);
+        } catch (Throwable $exception) {
+            UnresolvedException::throwException($className, $exception);
+        }
     }
 }

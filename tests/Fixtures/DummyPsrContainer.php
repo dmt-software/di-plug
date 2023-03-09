@@ -6,15 +6,15 @@ use Psr\Container\ContainerInterface;
 
 class DummyPsrContainer implements ContainerInterface
 {
-    private object $container;
+    private DummyContainer $container;
     protected string $containerName;
     public object $publicContainer;
 
     /**
      * DummyPsrContainer constructor.
-     * @param object $container
+     * @param DummyContainer $container
      */
-    public function __construct(object $container)
+    public function __construct(DummyContainer $container)
     {
         $this->container = $container;
         $this->publicContainer = $container;
