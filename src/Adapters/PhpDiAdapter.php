@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace DMT\DependencyInjection\Adapters;
 
@@ -14,25 +15,13 @@ use Exception;
  * Class PhpDiAdapter
  *
  * @see https://github.com/PHP-DI/PHP-DI
- *
- * @package DMT\DependencyInjection\Adapters
  */
 class PhpDiAdapter extends Adapter
 {
-    private Container $container;
-
-    /**
-     * PhpDiAdapter constructor.
-     * @param Container $container
-     */
-    public function __construct(Container $container)
+    public function __construct(private readonly Container $container)
     {
-        $this->container = $container;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function set(string $id, Closure $value): void
     {
         if (in_array($id, $this->container->getKnownEntryNames())) {
@@ -42,10 +31,7 @@ class PhpDiAdapter extends Adapter
         $this->container->set($id, $value->bindTo($this));
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function get($id)
+    public function get(string $id)
     {
         try {
             return $this->container->get($id);
@@ -56,10 +42,7 @@ class PhpDiAdapter extends Adapter
         }
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function has($id)
+    public function has(string $id): bool
     {
         return $this->container->has($id);
     }

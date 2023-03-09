@@ -3,36 +3,91 @@
 namespace DMT\DependencyInjection;
 
 use DMT\DependencyInjection\Adapters\Adapter;
+use DMT\DependencyInjection\Adapters\AuraAdapter;
+use DMT\DependencyInjection\Adapters\IlluminateAdapter;
+use DMT\DependencyInjection\Adapters\LeagueAdapter;
+use DMT\DependencyInjection\Adapters\PhpDiAdapter;
+use DMT\DependencyInjection\Adapters\PimpleAdapter;
 use DMT\DependencyInjection\Config\ContainerConfig;
 use DMT\DependencyInjection\Config\ContainerConfigList;
 use DMT\DependencyInjection\Detectors\DetectorList;
-use Symfony\Component\Yaml\Yaml;
+use DMT\DependencyInjection\Detectors\InstalledClassDetector;
+use DMT\DependencyInjection\Detectors\InstanceOfDetector;
+use DMT\DependencyInjection\Resolvers\FactoryResolver;
+use DMT\DependencyInjection\Resolvers\PropertyResolver;
+use DMT\DependencyInjection\Resolvers\Resolver;
+use RuntimeException;
 
-/**
- * Class ContainerFactory
- *
- * @package DMT\DependencyInjection
- */
 final class ContainerFactory
 {
-    /** @var ContainerConfigList|null */
+    private const DEFAULT_CONFIGURATION = [
+        'supported' => [
+            \Aura\Di\Container::class => [
+                'adapter' => AuraAdapter::class,
+                'resolver' => Resolver::class,
+            ],
+            \Aura\Di\ContainerBuilder::class => [
+                'adapter' => AuraAdapter::class,
+                'resolver' => FactoryResolver::class,
+                'accessor' => 'newInstance',
+            ],
+            \DI\Container::class => [
+                'adapter' => PhpDiAdapter::class,
+                'resolver' => Resolver::class,
+            ],
+            \Illuminate\Container\Container::class => [
+                'adapter' => IlluminateAdapter::class,
+                'resolver' => Resolver::class,
+            ],
+            \League\Container\Container::class => [
+                'adapter' => LeagueAdapter::class,
+                'resolver' => Resolver::class,
+            ],
+            \Pimple\Container::class => [
+                'adapter' => PimpleAdapter::class,
+                'resolver' => Resolver::class,
+            ],
+            \Pimple\Psr11\Container::class => [
+                'adapter' => PimpleAdapter::class,
+                'resolver' => PropertyResolver::class,
+                'accessor' => 'pimple',
+            ],
+        ],
+        'detectors' => [
+            InstanceOfDetector::class => [
+                'supported' => [
+                    \Aura\Di\Container::class,
+                    \DI\Container::class,
+                    \Illuminate\Container\Container::class,
+                    \League\Container\Container::class,
+                    \Pimple\Container::class,
+                    \Pimple\Psr11\Container::class,
+                ],
+            ],
+            InstalledClassDetector::class => [
+                'supported' => [
+                    \Aura\Di\ContainerBuilder::class,
+                    \DI\Container::class,
+                    \Illuminate\Container\Container::class,
+                    \League\Container\Container::class,
+                    \Pimple\Container::class,
+                ]
+            ],
+        ],
+    ];
+
     private ?ContainerConfigList $supportedContainers = null;
 
-    /** @var DetectorList|null */
     private ?DetectorList $containerDetectors = null;
 
-    /**
-     * Create the container from settings.
-     *
-     * @param object|null $containerInstance
-     * @return Container
-     */
+    public function __construct(array $configuration = self::DEFAULT_CONFIGURATION)
+    {
+        $this->supportedContainers = new ContainerConfigList($configuration['supported'] ?? []);
+        $this->containerDetectors = new DetectorList($configuration['detectors'], $this->supportedContainers);
+    }
+
     public function createContainer(object $containerInstance = null): Container
     {
-        if (!$this->supportedContainers) {
-            $this->parseConfig();
-        }
-
         foreach ($this->containerDetectors as $detector) {
             $containerConfig = $detector->detect($containerInstance);
             if ($containerConfig) {
@@ -40,28 +95,10 @@ final class ContainerFactory
             }
         }
 
-        throw new \RuntimeException('Unsupported container');
+        throw new RuntimeException('Unsupported container');
     }
 
-    /**
-     * Parse the configuration.
-     *
-     * @param string $file The yml containing the config.
-     */
-    public function parseConfig(string $file = __DIR__ . '/../config/container.yml'): void
-    {
-        $configuration = Yaml::parseFile($file);
-
-        $this->supportedContainers = new ContainerConfigList($configuration['supported'] ?? []);
-        $this->containerDetectors = new DetectorList($configuration['detectors'], $this->supportedContainers);
-    }
-
-    /**
-     * @param ContainerConfig $config
-     * @param object|null $containerInstance
-     * @return Adapter
-     */
-    protected function getAdapter(ContainerConfig $config, object $containerInstance = null): Adapter
+    private function getAdapter(ContainerConfig $config, object $containerInstance = null): Adapter
     {
         $adapter = $config->adapter;
         $resolver = $config->resolver;

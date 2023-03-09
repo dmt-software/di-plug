@@ -4,11 +4,6 @@ namespace DMT\DependencyInjection\Detectors;
 
 use DMT\DependencyInjection\Config\ContainerConfig;
 
-/**
- * Interface DetectorInterface
- *
- * @package DMT\DependencyInjection\Detectors
- */
 interface DetectorInterface
 {
     /**

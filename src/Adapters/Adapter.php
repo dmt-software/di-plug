@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace DMT\DependencyInjection\Adapters;
 
@@ -6,11 +7,6 @@ use Closure;
 use DMT\DependencyInjection\Exceptions\UnavailableException;
 use Psr\Container\ContainerInterface;
 
-/**
- * Class Adapter
- *
- * @package DMT\DependencyInjection\Adapters
- */
 abstract class Adapter implements ContainerInterface
 {
     /**

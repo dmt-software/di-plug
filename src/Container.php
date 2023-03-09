@@ -9,17 +9,13 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use SebastianBergmann\CodeUnit\FunctionUnit;
 
-/**
- * Class Container
- *
- * @package DMT\DependencyInjection
- */
 class Container implements ContainerInterface
 {
     private Adapter $adapter;
 
     /**
      * Container constructor.
+     *
      * @param Adapter $adapter
      */
     public function __construct(Adapter $adapter)
@@ -47,7 +43,7 @@ class Container implements ContainerInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function get($id)
+    public function get(string $id)
     {
         return $this->adapter->get($id);
     }
@@ -58,7 +54,7 @@ class Container implements ContainerInterface
      * @param string $id
      * @return bool
      */
-    public function has($id)
+    public function has(string $id): bool
     {
         return $this->adapter->has($id);
     }

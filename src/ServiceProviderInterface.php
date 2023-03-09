@@ -2,11 +2,6 @@
 
 namespace DMT\DependencyInjection;
 
-/**
- * Interface ServiceProvider
- *
- * @package DMT\DependencyInjection
- */
 interface ServiceProviderInterface
 {
     /**

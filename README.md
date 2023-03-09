@@ -4,7 +4,7 @@
 [psr-11](https://www.php-fig.org/psr/psr-11/) introduced a standardized way for packages, libraries and frameworks to
 retrieve objects from containers. This package also allows adding dependencies to a container by a uniform interface
 without the use of a specific container implementation. This will help developers to access the dependency injection
-container to make installation of their packages more easy.
+container to make installation of their packages easier.
 
 ## Installation
 ```bash
@@ -19,9 +19,7 @@ use DMT\DependencyInjection\Container;
 use Pimple\Container as PimpleContainer;
  
 $container = new Container(new PimpleAdapter(new PimpleContainer()));
-$container->set(SomeClass::class, function () {
-    return new SomeClass($this->get(SomeDependency::class));
-});
+$container->set(SomeClass::class, fn () => new SomeClass($container->get(SomeDependency::class)));
 ````
 
 ### Autodetect
@@ -31,9 +29,7 @@ use DMT\DependencyInjection\ContainerFactory;
 /** @var object|null $fromContainerInstanceOrNull */
 $factory = new ContainerFactory();
 $container = $factory->createContainer($fromContainerInstanceOrNull);
-$container->set(SomeClass::class, function () {
-    return new SomeClass($this->get(SomeDependency::class));
-});
+$container->set(SomeClass::class, fn () => new SomeClass($container->get(SomeDependency::class)));
 ````
 
 ## Supports

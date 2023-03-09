@@ -3,6 +3,7 @@
 namespace DMT\DependencyInjection\Detectors;
 
 use ArrayObject;
+use CallbackFilterIterator;
 use DMT\DependencyInjection\Config\ContainerConfig;
 use DMT\DependencyInjection\Config\ContainerConfigList;
 use IteratorAggregate;
@@ -16,35 +17,29 @@ use Traversable;
 final class DetectorList implements IteratorAggregate
 {
     /** @var DetectorInterface[] $detectors */
-    private array $detectors;
-
-    /** @var ContainerConfigList $containerConfigList */
-    private ContainerConfigList $containerConfigList;
+    private readonly array $detectors;
 
     /**
      * DetectorList constructor.
-     * @param array $detectors
+     *
+     * @param array|DetectorInterface[] $detectors
      * @param ContainerConfigList $containerConfigList
      */
-    public function __construct(array $detectors, ContainerConfigList $containerConfigList)
+    public function __construct(array $detectors, private readonly ContainerConfigList $containerConfigList)
     {
-        $this->containerConfigList = $containerConfigList;
-
         array_walk($detectors, function(array &$detector, string $detectorClass) {
-            $filterIterator = function (ContainerConfig $containerConfig) use ($detector) {
-                return in_array($containerConfig->className, $detector['supported']);
-            };
-
-            $detector = new $detectorClass(new \CallbackFilterIterator($this->containerConfigList, $filterIterator));
+            $detector = new $detectorClass(
+                new CallbackFilterIterator(
+                    $this->containerConfigList,
+                    fn (ContainerConfig $configuration) => in_array($configuration->className, $detector['supported'])
+                )
+            );
         });
 
         $this->detectors = $detectors;
     }
 
-    /**
-     * @return Traversable
-     */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         $this->containerConfigList->rewind();
 

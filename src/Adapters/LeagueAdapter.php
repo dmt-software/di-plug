@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\DependencyInjection\Adapters;
 
 use Closure;
@@ -14,26 +16,13 @@ use League\Container\Exception\NotFoundException as LeagueNotFoundException;
  * Class LeagueAdapter
  *
  * @see https://github.com/thephpleague/container
- *
- * @package DMT\DependencyInjection\Adapters
  */
 class LeagueAdapter extends Adapter
 {
-    private Container $container;
-
-    /**
-     * LeagueAdapter constructor.
-     * @param Container $container
-     */
-    public function __construct(Container $container)
+    public function __construct(private readonly Container $container)
     {
-        $this->container = $container;
     }
 
-    /**
-     * @param string $id
-     * @param Closure $value
-     */
     public function set(string $id, Closure $value): void
     {
         if ($this->container->has($id)) {
@@ -43,11 +32,7 @@ class LeagueAdapter extends Adapter
         $this->container->add($id, $value->bindTo($this));
     }
 
-    /**
-     * @param string $id
-     * @return mixed
-     */
-    public function get($id)
+    public function get(string $id)
     {
         try {
             return $this->container->get($id);
@@ -58,11 +43,7 @@ class LeagueAdapter extends Adapter
         }
     }
 
-    /**
-     * @param string $id
-     * @return bool
-     */
-    public function has($id)
+    public function has(string $id): bool
     {
         return $this->container->has($id);
     }

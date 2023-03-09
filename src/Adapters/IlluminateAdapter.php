@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace DMT\DependencyInjection\Adapters;
 
@@ -14,31 +15,13 @@ use Illuminate\Container\EntryNotFoundException;
  * Class IlluminateAdapter
  *
  * @see https://github.com/illuminate/container
- *
- * @package DMT\DependencyInjection\Adapters
  */
 class IlluminateAdapter extends Adapter
 {
-    private Container $container;
-
-    /**
-     * IlluminateAdapter constructor.
-     *
-     * @param Container $container
-     */
-    public function __construct(Container $container)
+    public function __construct(private readonly Container $container)
     {
-        $this->container = $container;
     }
 
-    /**
-     * Store dependency in container.
-     *
-     * @param string $id
-     * @param Closure $value
-     *
-     * @throws UnresolvedException
-     */
     public function set(string $id, Closure $value): void
     {
         if ($this->container->has($id)) {
@@ -48,16 +31,7 @@ class IlluminateAdapter extends Adapter
         $this->container->bind($id, $value->bindTo($this));
     }
 
-    /**
-     * Get dependency from container.
-     *
-     * @param string $id
-     * @return object
-     *
-     * @throws NotFoundException
-     * @throws UnresolvedException
-     */
-    public function get($id)
+    public function get(string $id)
     {
         try {
             return $this->container->get($id);
@@ -68,13 +42,7 @@ class IlluminateAdapter extends Adapter
         }
     }
 
-    /**
-     * Check if dependency is set.
-     *
-     * @param string $id
-     * @return bool
-     */
-    public function has($id)
+    public function has(string $id): bool
     {
         return $this->container->has($id);
     }

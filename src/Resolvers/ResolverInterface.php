@@ -7,8 +7,6 @@ use RuntimeException;
 
 /**
  * Interface ResolverInterface
- *
- * @package DMT\DependencyInjection\Resolvers
  */
 interface ResolverInterface
 {

@@ -9,28 +9,12 @@ use ReflectionProperty;
 /**
  * Class PropertyResolver
  *
- * This resolver returns a container instance that is wrapped within an other object.
- *
- * @package DMT\DependencyInjection\Resolvers
+ * This resolver returns a container instance that is wrapped within another object.
  */
 final class PropertyResolver implements ResolverInterface
 {
-    /** @var object $containerWrapper */
-    private object $containerWrapper;
-
-    /** @var string $propertyName */
-    private string $propertyName;
-
-    /**
-     * PropertyResolver constructor.
-     *
-     * @param object $containerInstance
-     * @param string $propertyName
-     */
-    public function __construct(object $containerInstance, string $propertyName)
+    public function __construct(private readonly object $containerInstance, private readonly string $propertyName)
     {
-        $this->containerWrapper = $containerInstance;
-        $this->propertyName = $propertyName;
     }
 
     /**
@@ -42,20 +26,15 @@ final class PropertyResolver implements ResolverInterface
     public function resolve(): object
     {
         try {
-            $reflectionProperty = new ReflectionProperty($this->containerWrapper, $this->propertyName);
-
-            if (!$reflectionProperty->isPublic()) {
-                $reflectionProperty->setAccessible(true);
-            }
-
-            $value = $reflectionProperty->getValue($this->containerWrapper);
+            $reflectionProperty = new ReflectionProperty($this->containerInstance, $this->propertyName);
+            $value = $reflectionProperty->getValue($this->containerInstance);
 
             if (!is_object($value)) {
                 throw new InvalidArgumentException("property `{$this->propertyName}` is not a container instance");
             }
 
             return $value;
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             throw new InvalidArgumentException("property `{$this->propertyName}` does not exists");
         }
     }

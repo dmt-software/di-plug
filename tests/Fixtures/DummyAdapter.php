@@ -31,7 +31,7 @@ class DummyAdapter extends Adapter
      * @param string $id
      * @return mixed
      */
-    public function get($id)
+    public function get(string $id)
     {
         return $this->container->get($id);
     }
@@ -40,7 +40,7 @@ class DummyAdapter extends Adapter
      * @param string $id
      * @return bool
      */
-    public function has($id)
+    public function has(string $id): bool
     {
         return $this->container->exists($id);
     }

@@ -2,66 +2,27 @@
 
 namespace DMT\DependencyInjection\Config;
 
+use DMT\DependencyInjection\Adapters\Adapter;
 use DMT\DependencyInjection\Resolvers\Resolver;
+use DMT\DependencyInjection\Resolvers\ResolverInterface;
+use InvalidArgumentException;
 
-/**
- * Class ContainerConfig
- *
- * @package DMT\DependencyInjection\Config
- */
 final class ContainerConfig
 {
-    /**
-     * The class name of the container.
-     *
-     * @var string $className
-     */
-    public string $className;
-
-    /**
-     * The class name of the container resolver.
-     *
-     * @var string $resolver
-     */
-    public string $resolver = Resolver::class;
-
-    /**
-     * The class name of the adapter for the container.
-     *
-     * @var string $adapter
-     */
-    public string $adapter;
-
-    /**
-     * The property or method to retrieve the container (if wrapped)
-     *
-     * @var string|null $accessor
-     */
-    public ?string $accessor = null;
-
-    /**
-     * ContainerConfig constructor.
-     * @param string $className
-     * @param string $resolver
-     * @param string $adapter
-     * @param string|null $accessor
-     */
-    public function __construct(string $className, string $resolver, string $adapter, string $accessor = null)
-    {
-        $this->className = $className;
-        $this->resolver = $resolver;
-        $this->adapter = $adapter;
-        $this->accessor = $accessor;
+    public function __construct(
+        public readonly string $className,
+        public string $resolver,
+        public string $adapter,
+        public ?string $accessor = null
+    ) {
+        assert(is_a($resolver, ResolverInterface::class, true), new InvalidArgumentException('Invalid resolver used'));
+        assert(is_a($adapter, Adapter::class, true), new InvalidArgumentException('Invalid adapter used'));
     }
 
-    /**
-     * @param string $className
-     * @param array $arguments
-     * @return static
-     */
     public static function create(string $className, array $arguments = []): self
     {
         $arguments += ['className' => $className];
+        $arguments['resolver'] ??= Resolver::class;
 
         return new ContainerConfig(...array_replace(get_class_vars(__CLASS__), $arguments));
     }

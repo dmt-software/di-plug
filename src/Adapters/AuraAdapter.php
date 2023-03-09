@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace DMT\DependencyInjection\Adapters;
 
@@ -19,30 +20,16 @@ use ReflectionProperty;
  * resolved.
  *
  * @see https://github.com/auraphp/Aura.Di
- *
- * @package DMT\DependencyInjection\Adapters
  */
 final class AuraAdapter extends Adapter
 {
-    private Container $container;
-
-    /**
-     * AuraAdapter constructor.
-     * @param Container $container
-     */
-    public function __construct(Container $container)
+    public function __construct(private readonly Container $container)
     {
-        $this->container = $container;
-
         if ($container->isLocked()) {
             $this->unlock();
         }
     }
 
-    /**
-     * @param string $id
-     * @param Closure $value
-     */
     public function set(string $id, Closure $value): void
     {
         try {
@@ -52,11 +39,7 @@ final class AuraAdapter extends Adapter
         }
     }
 
-    /**
-     * @param string $id
-     * @return mixed
-     */
-    public function get($id)
+    public function get(string $id)
     {
         try {
             return $this->container->get($id);
@@ -67,24 +50,14 @@ final class AuraAdapter extends Adapter
         }
     }
 
-    /**
-     * @param string $id
-     * @return bool
-     */
-    public function has($id)
+    public function has(string $id): bool
     {
         return $this->container->has($id);
     }
 
-    /**
-     * Unlock the container to allow a new set of dependencies.
-     *
-     * @throws ReflectionException
-     */
-    protected function unlock(): void
+    private function unlock(): void
     {
         $reflectionProperty = new ReflectionProperty($this->container, 'locked');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->container, false);
     }
 }

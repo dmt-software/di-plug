@@ -1,0 +1,9 @@
+# exclude from dist
+/.github          export-ignore
+/tests            export-ignore
+/.gitattributes   export-ignore
+/.gitignore       export-ignore
+/phpunit.xml.dist export-ignore
+
+# improve git diff
+*.php diff=php

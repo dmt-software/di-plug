@@ -22,9 +22,7 @@ abstract class AdapterTest extends TestCase
 
         $this->assertTrue($adapter->has(Adapter::class));
 
-        $adapter->set(Container::class, function () {
-            return new Container($this->get(Adapter::class));
-        });
+        $adapter->set(Container::class, fn () => new Container($container->get(Adapter::class)));
 
         $this->assertInstanceOf(Container::class, $adapter->get(Container::class));
     }
@@ -45,7 +43,7 @@ abstract class AdapterTest extends TestCase
      *
      * @return MockObject
      */
-    protected function getMockedContainer(string $container, string $method, $returnValue)
+    protected function getMockedContainer(string $container, string $method, mixed $returnValue)
     {
         $container = $this->getMockBuilder($container)
             ->disableOriginalConstructor()
@@ -57,11 +55,15 @@ abstract class AdapterTest extends TestCase
                 ->expects($this->any())
                 ->method($method)
                 ->willThrowException($returnValue);
-        } else {
+        } elseif ($method !== 'set') {
             $container
                 ->expects($this->any())
                 ->method($method)
                 ->willReturn($returnValue);
+        } else {
+            $container
+                ->expects($this->any())
+                ->method($method);
         }
 
         return $container;
