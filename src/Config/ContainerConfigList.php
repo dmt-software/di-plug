@@ -4,6 +4,9 @@ namespace DMT\DependencyInjection\Config;
 
 use ArrayIterator;
 
+/**
+ * @method ContainerConfig current()
+ */
 final class ContainerConfigList extends ArrayIterator
 {
     public function __construct(array $containerConfigList)

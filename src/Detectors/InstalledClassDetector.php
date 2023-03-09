@@ -25,9 +25,14 @@ final class InstalledClassDetector implements DetectorInterface
 
     public function detect(?object $containerInstance): ?ContainerConfig
     {
+        if (is_object($containerInstance)) {
+            return null;
+        }
+
+        /** @var ContainerConfig $supportedContainer */
         foreach ($this->supportedContainers as $supportedContainer) {
             if (class_exists($supportedContainer->className)) {
-                if (!$supportedContainer->resolver instanceof FactoryResolver) {
+                if ($supportedContainer->resolver !== FactoryResolver::class) {
                     $supportedContainer = clone($supportedContainer);
                     $supportedContainer->resolver = ClassResolver::class;
                 }

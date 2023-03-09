@@ -9,11 +9,6 @@ use DMT\DependencyInjection\Config\ContainerConfigList;
 use IteratorAggregate;
 use Traversable;
 
-/**
- * Class DetectorList
- *
- * @package DMT\DependencyInjection\Detectors
- */
 final class DetectorList implements IteratorAggregate
 {
     /** @var DetectorInterface[] $detectors */

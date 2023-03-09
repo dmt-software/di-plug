@@ -10,6 +10,7 @@ use DMT\DependencyInjection\Adapters\PhpDiAdapter;
 use DMT\DependencyInjection\Adapters\PimpleAdapter;
 use DMT\DependencyInjection\Config\ContainerConfig;
 use DMT\DependencyInjection\Config\ContainerConfigList;
+use DMT\DependencyInjection\Detectors\DetectorInterface;
 use DMT\DependencyInjection\Detectors\DetectorList;
 use DMT\DependencyInjection\Detectors\InstalledClassDetector;
 use DMT\DependencyInjection\Detectors\InstanceOfDetector;
@@ -76,9 +77,8 @@ final class ContainerFactory
         ],
     ];
 
-    private ?ContainerConfigList $supportedContainers = null;
-
-    private ?DetectorList $containerDetectors = null;
+    private readonly ContainerConfigList $supportedContainers;
+    private readonly DetectorList $containerDetectors;
 
     public function __construct(array $configuration = self::DEFAULT_CONFIGURATION)
     {
@@ -88,6 +88,7 @@ final class ContainerFactory
 
     public function createContainer(object $containerInstance = null): Container
     {
+        /** @var DetectorInterface $detector */
         foreach ($this->containerDetectors as $detector) {
             $containerConfig = $detector->detect($containerInstance);
             if ($containerConfig) {
@@ -103,12 +104,14 @@ final class ContainerFactory
         $adapter = $config->adapter;
         $resolver = $config->resolver;
 
-        $arguments = [];
-        if ($containerInstance) {
-            $arguments = [$containerInstance];
-            if ($config->accessor) {
-                $arguments[] = $config->accessor;
-            }
+        $arguments = [$containerInstance];
+
+        if (!$containerInstance) {
+            $arguments = [$config->className];
+        }
+
+        if ($config->accessor) {
+            $arguments[] = $config->accessor;
         }
 
         $resolver = new $resolver(...$arguments);
