@@ -11,16 +11,8 @@ use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class Container implements ContainerInterface
 {
-    private Adapter $adapter;
-
-    /**
-     * Container constructor.
-     *
-     * @param Adapter $adapter
-     */
-    public function __construct(Adapter $adapter)
+    public function __construct(private readonly Adapter $adapter)
     {
-        $this->adapter = $adapter;
     }
 
     /**
