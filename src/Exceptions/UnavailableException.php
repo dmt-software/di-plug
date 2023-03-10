@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\DependencyInjection\Exceptions;
 
 use InvalidArgumentException;
@@ -15,6 +17,6 @@ final class UnavailableException extends InvalidArgumentException implements Con
 {
     public static function throwException(string $key, Throwable $previous = null): void
     {
-        throw new self(sprintf('entry `%s` is not excepted by container', $key), null, $previous);
+        throw new self(sprintf('entry `%s` is not excepted by container', $key), 0, $previous);
     }
 }

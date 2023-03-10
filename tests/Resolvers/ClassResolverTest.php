@@ -1,7 +1,10 @@
 <?php
 
-namespace DMT\DependencyInjection\Resolvers;
+declare(strict_types=1);
 
+namespace DMT\Test\DependencyInjection\Resolvers;
+
+use DMT\DependencyInjection\Resolvers\ClassResolver;
 use DMT\Test\DependencyInjection\Fixtures\DummyContainer;
 use PHPUnit\Framework\TestCase;
 

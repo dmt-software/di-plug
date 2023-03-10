@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\DependencyInjection;
 
 use Closure;
@@ -39,7 +41,7 @@ class Container implements ContainerInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function get(string $id, mixed...$args)
+    public function get(string $id, mixed ...$args)
     {
         $dependency = call_user_func(
             function () use ($id, $args) {
@@ -94,7 +96,7 @@ class Container implements ContainerInterface
      * @return object
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    private function getInstance(string $className, mixed...$constructorArgs): object
+    private function getInstance(string $className, mixed ...$constructorArgs): object
     {
         try {
             $class = new ReflectionClass($className);

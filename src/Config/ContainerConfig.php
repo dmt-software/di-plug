@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\DependencyInjection\Config;
 
 use DMT\DependencyInjection\Adapters\Adapter;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\DependencyInjection\Exceptions;
 
 use Psr\Container\ContainerExceptionInterface;
@@ -15,6 +17,6 @@ final class UnresolvedException extends RuntimeException implements ContainerExc
 {
     public static function throwException(string $key, Throwable $previous = null): void
     {
-        throw new self(sprintf('error resolving `%s` with container', $key), null, $previous);
+        throw new self(sprintf('error resolving `%s` with container', $key), 0, $previous);
     }
 }

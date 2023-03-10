@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\Test\DependencyInjection\Adapters;
 
 use DMT\DependencyInjection\Adapters\Adapter;
@@ -29,7 +31,8 @@ class PimpleAdapterTest extends AdapterTest
         $container = $this->getMockedContainer(PimpleContainer::class, $method, $returnValue);
 
         $adapter = new PimpleAdapter($container);
-        $adapter->set(Container::class, function () {});
+        $adapter->set(Container::class, function () {
+        });
         $adapter->has(Container::class);
         $adapter->get(Container::class);
     }

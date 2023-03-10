@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\Test\DependencyInjection\Detectors;
 
 use DMT\DependencyInjection\Adapters\PimpleAdapter;
@@ -23,7 +25,8 @@ class DetectorListTest extends TestCase
         $list->append(new ContainerConfig(PimpleContainer::class, ClassResolver::class, PimpleAdapter::class));
 
         $detectors = new DetectorList(
-            [InstalledClassDetector::class => ['supported' => [DummyContainer::class]]], $list
+            [InstalledClassDetector::class => ['supported' => [DummyContainer::class]]],
+            $list
         );
 
         foreach ($detectors as $detector) {
@@ -38,7 +41,8 @@ class DetectorListTest extends TestCase
         $list->append(new ContainerConfig(PimpleContainer::class, ClassResolver::class, PimpleAdapter::class));
 
         $detectors = new DetectorList(
-            [InstanceOfDetector::class => ['supported' => [DummyContainer::class, PimpleContainer::class]]], $list
+            [InstanceOfDetector::class => ['supported' => [DummyContainer::class, PimpleContainer::class]]],
+            $list
         );
 
         foreach ($detectors as $detector) {

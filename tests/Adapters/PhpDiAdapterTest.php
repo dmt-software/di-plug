@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\Test\DependencyInjection\Adapters;
 
 use DI\Container as PhpDiContainer;
@@ -33,7 +35,8 @@ class PhpDiAdapterTest extends AdapterTest
             $definitionSource
                 ->expects($this->any())
                 ->method('getDefinitions')
-                ->willReturn([Container::class => function () {}]);
+                ->willReturn([Container::class => function () {
+                }]);
         }
 
         /** @var PhpDiContainer $container */
@@ -44,7 +47,8 @@ class PhpDiAdapterTest extends AdapterTest
 
 
         $adapter = new PhpDiAdapter($container);
-        $adapter->set(Container::class, function () {});
+        $adapter->set(Container::class, function () {
+        });
         $adapter->get(Container::class);
     }
 

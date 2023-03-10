@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\Test\DependencyInjection\Adapters;
 
 use Aura\Di\Container as AuraContainer;
@@ -40,7 +42,8 @@ class AuraAdapterTest extends AdapterTest
 
         /** @var AuraContainer $container */
         $adapter = new AuraAdapter($container);
-        $adapter->set(AuraContainer::class, function () {});
+        $adapter->set(AuraContainer::class, function () {
+        });
         $adapter->get(AuraContainer::class);
     }
 

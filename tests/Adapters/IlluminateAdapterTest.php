@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\Test\DependencyInjection\Adapters;
 
 use DMT\DependencyInjection\Adapters\Adapter;
@@ -30,7 +32,8 @@ class IlluminateAdapterTest extends AdapterTest
 
         $adapter = new IlluminateAdapter($container);
 
-        $adapter->set(IlluminateContainer::class, function () {});
+        $adapter->set(IlluminateContainer::class, function () {
+        });
         $adapter->get(IlluminateContainer::class);
     }
 

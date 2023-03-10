@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\Test\DependencyInjection\Adapters;
 
 use DMT\DependencyInjection\Adapters\Adapter;
@@ -46,7 +48,8 @@ class LeagueAdapterTest extends AdapterTest
         );
 
         $adapter = new LeagueAdapter($container);
-        $adapter->set(LeagueContainer::class, function () {});
+        $adapter->set(LeagueContainer::class, function () {
+        });
         $adapter->get(LeagueContainer::class);
     }
 

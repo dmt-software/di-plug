@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\Test\DependencyInjection\Resolvers;
 
 use DMT\DependencyInjection\Resolvers\PublicMethodResolver;

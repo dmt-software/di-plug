@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\DependencyInjection\Detectors;
 
 use ArrayObject;
@@ -22,11 +24,11 @@ final class DetectorList implements IteratorAggregate
      */
     public function __construct(array $detectors, private readonly ContainerConfigList $containerConfigList)
     {
-        array_walk($detectors, function(array &$detector, string $detectorClass) {
+        array_walk($detectors, function (array &$detector, string $detectorClass) {
             $detector = new $detectorClass(
                 new CallbackFilterIterator(
                     $this->containerConfigList,
-                    fn (ContainerConfig $configuration) => in_array($configuration->className, $detector['supported'])
+                    fn(ContainerConfig $configuration) => in_array($configuration->className, $detector['supported'])
                 )
             );
         });

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DMT\Test\DependencyInjection\Fixtures;
 
 use stdClass;
@@ -8,7 +10,6 @@ class DummyContainer
 {
     public function add(string $id, $value): void
     {
-
     }
 
     public function get(string $id): object
