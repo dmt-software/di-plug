@@ -8,15 +8,15 @@ use Psr\Container\ContainerInterface;
 
 trait HasContainer
 {
-    private ContainerInterface $_container; // phpcs:ignore
+    private ContainerInterface $_container_; // phpcs:ignore
 
     public function getContainer(): ContainerInterface
     {
-        return $this->_container;
+        return $this->_container_;
     }
 
     public function setContainer(ContainerInterface $container): void
     {
-        $this->_container = $container;
+        $this->_container_ = $container;
     }
 }
