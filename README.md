@@ -86,7 +86,7 @@ class SomeClass
 ```
 
 This even works when the `HasContainer` is used within another trait, but just one level deep.
-Using the trait below f.i. enables `getTwigEngine()` call to retrieve the template engine in the class.
+Using the trait below f.i. enables `getTwigEngine()` call to retrieve the template engine in the parent class.
 
 ```php
 use DMT\DependencyInjection\Traits\HasContainer;
@@ -116,7 +116,7 @@ use Twig\Extension\StringLoaderExtension;
 class MyServiceProvider implements ServiceProviderInterface
 {
     /**
-     * Ensure twig is enabled with string loader extension.   
+     * Register dependencies and ensure twig is enabled with string loader extension.   
      */
     public function register(Container $container): void
     {
@@ -129,7 +129,7 @@ class MyServiceProvider implements ServiceProviderInterface
             $env->addExtension(new StringLoaderExtension());
         }
 
-        $container->set(MyClassInterface::class, fn() => new MyClassImplementation());
+        $container->set(MyClassInterface::class, fn() => new MyClass($container->get(Environment::class)));
     }
 }
 ```
