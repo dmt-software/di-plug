@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DMT\DependencyInjection\Detectors;
 
-use DMT\DependencyInjection\Config\ContainerConfig;
+use DMT\DependencyInjection\Resolvers\ResolverInterface;
 
 interface DetectorInterface
 {
@@ -12,7 +12,7 @@ interface DetectorInterface
      * Detect container configuration.
      *
      * @param object|null $containerInstance
-     * @return ContainerConfig|null
+     * @return ResolverInterface|null
      */
-    public function detect(?object $containerInstance): ?ContainerConfig;
+    public function detect(?object $containerInstance): ?ResolverInterface;
 }

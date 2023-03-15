@@ -75,7 +75,7 @@ class ContainerTest extends TestCase
         $container->get($class, ...$args);
     }
 
-    public function provideInstantiationFailure(): iterable
+    public static function provideInstantiationFailure(): iterable
     {
         return [
             'missing required constructor param' => [DummyPsrContainer::class],

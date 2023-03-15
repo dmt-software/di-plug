@@ -17,7 +17,7 @@ use League\Container\ServiceProvider\ServiceProviderAggregate;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 
-class LeagueAdapterTest extends AdapterTest
+class LeagueAdapterTest extends AdapterTestCase
 {
     /**
      * @dataProvider provideException
@@ -53,7 +53,7 @@ class LeagueAdapterTest extends AdapterTest
         $adapter->get(LeagueContainer::class);
     }
 
-    public function provideException(): iterable
+    public static function provideException(): iterable
     {
         return [
             'set-existing'  => ['has', true, UnavailableException::class],

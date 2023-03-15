@@ -25,7 +25,7 @@ class PropertyResolverTest extends TestCase
         $this->assertEquals($container, $resolver->resolve());
     }
 
-    public function provideContainer(): iterable
+    public static function provideContainer(): iterable
     {
         $dummy = new DummyContainer();
 
@@ -47,7 +47,7 @@ class PropertyResolverTest extends TestCase
         (new PropertyResolver($wrapper, $property))->resolve();
     }
 
-    public function provideContainerFailure(): iterable
+    public static function provideContainerFailure(): iterable
     {
         $dummy = new DummyContainer();
 

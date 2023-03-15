@@ -38,7 +38,10 @@ $container->set(SomeClass::class, fn() => new SomeClass($container->get(SomeDepe
 
 ### Autodiscovery
 
-The code can discover the dependency container installed.  
+> NOTE: When another dependency uses a supported container, autodiscovery might end up using a different container than
+> expected.
+ 
+The code can discover the dependency container installed.
 
 ```php
 use DMT\DependencyInjection\ContainerFactory;

@@ -4,115 +4,45 @@ declare(strict_types=1);
 
 namespace DMT\DependencyInjection;
 
-use DMT\DependencyInjection\Adapters\Adapter;
 use DMT\DependencyInjection\Adapters\AuraAdapter;
 use DMT\DependencyInjection\Adapters\IlluminateAdapter;
 use DMT\DependencyInjection\Adapters\LeagueAdapter;
 use DMT\DependencyInjection\Adapters\PhpDiAdapter;
 use DMT\DependencyInjection\Adapters\PimpleAdapter;
-use DMT\DependencyInjection\Config\ContainerConfig;
-use DMT\DependencyInjection\Config\ContainerConfigList;
+use DMT\DependencyInjection\Detectors\AuraDetector;
 use DMT\DependencyInjection\Detectors\DetectorInterface;
-use DMT\DependencyInjection\Detectors\DetectorList;
-use DMT\DependencyInjection\Detectors\InstalledClassDetector;
-use DMT\DependencyInjection\Detectors\InstanceOfDetector;
-use DMT\DependencyInjection\Resolvers\FactoryResolver;
-use DMT\DependencyInjection\Resolvers\PropertyResolver;
-use DMT\DependencyInjection\Resolvers\Resolver;
+use DMT\DependencyInjection\Detectors\IlluminateDetector;
+use DMT\DependencyInjection\Detectors\LeagueDetector;
+use DMT\DependencyInjection\Detectors\PhpDiDetector;
+use DMT\DependencyInjection\Detectors\PimpleDetector;
+use DMT\DependencyInjection\Resolvers\ResolverInterface;
 use RuntimeException;
 
 final class ContainerFactory
 {
-    private const DEFAULT_CONFIGURATION = [
-        'supported' => [
-            \Aura\Di\Container::class => [
-                'adapter' => AuraAdapter::class,
-                'resolver' => Resolver::class,
-            ],
-            \Aura\Di\ContainerBuilder::class => [
-                'adapter' => AuraAdapter::class,
-                'resolver' => FactoryResolver::class,
-                'accessor' => 'newInstance',
-            ],
-            \DI\Container::class => [
-                'adapter' => PhpDiAdapter::class,
-                'resolver' => Resolver::class,
-            ],
-            \Illuminate\Container\Container::class => [
-                'adapter' => IlluminateAdapter::class,
-                'resolver' => Resolver::class,
-            ],
-            \League\Container\Container::class => [
-                'adapter' => LeagueAdapter::class,
-                'resolver' => Resolver::class,
-            ],
-            \Pimple\Container::class => [
-                'adapter' => PimpleAdapter::class,
-                'resolver' => Resolver::class,
-            ],
-            \Pimple\Psr11\Container::class => [
-                'adapter' => PimpleAdapter::class,
-                'resolver' => PropertyResolver::class,
-                'accessor' => 'pimple',
-            ],
-        ],
-        'detectors' => [
-            InstanceOfDetector::class => [
-                'supported' => [
-                    \Aura\Di\Container::class,
-                    \DI\Container::class,
-                    \Illuminate\Container\Container::class,
-                    \League\Container\Container::class,
-                    \Pimple\Container::class,
-                    \Pimple\Psr11\Container::class,
-                ],
-            ],
-            InstalledClassDetector::class => [
-                'supported' => [
-                    \Aura\Di\ContainerBuilder::class,
-                    \DI\Container::class,
-                    \Illuminate\Container\Container::class,
-                    \League\Container\Container::class,
-                    \Pimple\Container::class,
-                ]
-            ],
-        ],
+    private const DETECTORS = [
+        AuraAdapter::class => AuraDetector::class,
+        IlluminateAdapter::class => IlluminateDetector::class,
+        LeagueAdapter::class => LeagueDetector::class,
+        PhpDiAdapter::class => PhpDiDetector::class,
+        PimpleAdapter::class => PimpleDetector::class,
     ];
 
-    private readonly ContainerConfigList $supportedContainers;
-    private readonly DetectorList $containerDetectors;
-
-    public function __construct(array $configuration = self::DEFAULT_CONFIGURATION)
+    public function __construct(private array $detectors = self::DETECTORS)
     {
-        $this->supportedContainers = new ContainerConfigList($configuration['supported'] ?? []);
-        $this->containerDetectors = new DetectorList($configuration['detectors'] ?? [], $this->supportedContainers);
+        array_walk($this->detectors, fn (&$detector) => is_object($detector) || $detector = new $detector());
     }
 
     public function createContainer(object $containerInstance = null): Container
     {
         /** @var DetectorInterface $detector */
-        foreach ($this->containerDetectors as $detector) {
-            $containerConfig = $detector->detect($containerInstance);
-            if ($containerConfig) {
-                return new Container($this->getAdapter($containerConfig, $containerInstance));
+        foreach ($this->detectors as $adapter => $detector) {
+            $resolver = $detector->detect($containerInstance);
+            if ($resolver instanceof ResolverInterface) {
+                return new Container(new $adapter($resolver->resolve()));
             }
         }
 
         throw new RuntimeException('Unsupported container');
-    }
-
-    private function getAdapter(ContainerConfig $config, object $containerInstance = null): Adapter
-    {
-        $adapter = $config->adapter;
-        $resolver = $config->resolver;
-
-        $arguments = [$containerInstance ?? $config->className];
-        if ($config->accessor) {
-            $arguments[] = $config->accessor;
-        }
-
-        $resolver = new $resolver(...$arguments);
-
-        return new $adapter($resolver->resolve());
     }
 }

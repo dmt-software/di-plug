@@ -14,7 +14,7 @@ use Illuminate\Container\EntryNotFoundException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Psr\Container\ContainerInterface;
 
-class IlluminateAdapterTest extends AdapterTest
+class IlluminateAdapterTest extends AdapterTestCase
 {
     /**
      * @dataProvider provideException
@@ -37,7 +37,7 @@ class IlluminateAdapterTest extends AdapterTest
         $adapter->get(IlluminateContainer::class);
     }
 
-    public function provideException(): iterable
+    public static function provideException(): iterable
     {
         return [
             'set-existing' => ['has', true, UnavailableException::class],

@@ -11,7 +11,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
-abstract class AdapterTest extends TestCase
+abstract class AdapterTestCase extends TestCase
 {
     /**
      * Test the adapter.

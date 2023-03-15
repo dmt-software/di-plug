@@ -17,7 +17,7 @@ use Exception;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 
-class PhpDiAdapterTest extends AdapterTest
+class PhpDiAdapterTest extends AdapterTestCase
 {
     /**
      * @dataProvider provideException
@@ -52,7 +52,7 @@ class PhpDiAdapterTest extends AdapterTest
         $adapter->get(Container::class);
     }
 
-    public function provideException(): iterable
+    public static function provideException(): iterable
     {
         return [
             'set-override'  => ['set', null, UnavailableException::class],

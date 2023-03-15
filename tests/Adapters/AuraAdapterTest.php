@@ -17,7 +17,7 @@ use Exception;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 
-class AuraAdapterTest extends AdapterTest
+class AuraAdapterTest extends AdapterTestCase
 {
     /**
      * @dataProvider provideException
@@ -47,7 +47,7 @@ class AuraAdapterTest extends AdapterTest
         $adapter->get(AuraContainer::class);
     }
 
-    public function provideException(): iterable
+    public static function provideException(): iterable
     {
         return [
             'set-when-locked' => ['set', new Exception(), UnavailableException::class],

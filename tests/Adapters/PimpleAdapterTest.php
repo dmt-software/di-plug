@@ -14,7 +14,7 @@ use Pimple\Container as PimpleContainer;
 use Pimple\Psr11\Container;
 use Psr\Container\ContainerInterface;
 
-class PimpleAdapterTest extends AdapterTest
+class PimpleAdapterTest extends AdapterTestCase
 {
     /**
      * @dataProvider provideException
@@ -37,7 +37,7 @@ class PimpleAdapterTest extends AdapterTest
         $adapter->get(Container::class);
     }
 
-    public function provideException(): iterable
+    public static function provideException(): iterable
     {
         return [
             'set-object'    => ['offsetSet', new Exception(), UnavailableException::class],
