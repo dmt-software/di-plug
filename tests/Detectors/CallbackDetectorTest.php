@@ -55,7 +55,7 @@ class CallbackDetectorTest extends TestCase
      */
     public function testCreateFromCallable()
     {
-        function detect($container)
+        function detect($container): ?ResolverInterface
         {
             if (is_object($container)) {
                 return new Resolver($container);
