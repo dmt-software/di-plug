@@ -17,7 +17,6 @@ class LeagueDetectorTest extends TestCase
         $detector = new LeagueDetector();
 
         $this->assertInstanceOf(Resolver::class, $detector->detect($container));
-
     }
 
     public function testAutoDetect()

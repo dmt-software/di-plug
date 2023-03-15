@@ -27,7 +27,6 @@ class PimpleDetectorTest extends TestCase
         $detector = new PimpleDetector();
 
         $this->assertInstanceOf(PropertyResolver::class, $detector->detect($container));
-
     }
 
     public function testAutoDetect()
