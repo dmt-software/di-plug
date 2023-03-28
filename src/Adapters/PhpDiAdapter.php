@@ -29,7 +29,7 @@ class PhpDiAdapter extends Adapter
             UnavailableException::throwException($id);
         }
 
-        $this->container->set($id, $value->bindTo($this));
+        $this->container->set($id, $value);
     }
 
     public function get(string $id)

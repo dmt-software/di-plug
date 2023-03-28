@@ -29,7 +29,7 @@ class IlluminateAdapter extends Adapter
             UnavailableException::throwException($id);
         }
 
-        $this->container->bind($id, $value->bindTo($this));
+        $this->container->bind($id, $value);
     }
 
     public function get(string $id)

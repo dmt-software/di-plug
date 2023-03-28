@@ -34,7 +34,7 @@ final class AuraAdapter extends Adapter
     public function set(string $id, Closure $value): void
     {
         try {
-            $this->container->set($id, $value->bindTo($this));
+            $this->container->set($id, $value);
         } catch (Exception $exception) {
             UnavailableException::throwException($id, $exception);
         }

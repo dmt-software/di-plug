@@ -29,7 +29,7 @@ class LeagueAdapter extends Adapter
             UnavailableException::throwException($id);
         }
 
-        $this->container->add($id, $value->bindTo($this));
+        $this->container->add($id, $value);
     }
 
     public function get(string $id)

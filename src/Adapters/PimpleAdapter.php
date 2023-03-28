@@ -25,7 +25,7 @@ final class PimpleAdapter extends Adapter
     public function set(string $id, Closure $value): void
     {
         try {
-            $this->container->offsetSet($id, $value->bindTo($this));
+            $this->container->offsetSet($id, $value);
         } catch (Exception $exception) {
             UnavailableException::throwException($id, $exception);
         }
