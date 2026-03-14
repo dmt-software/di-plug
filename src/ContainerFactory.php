@@ -33,7 +33,7 @@ final class ContainerFactory
         array_walk($this->detectors, fn (&$detector) => is_object($detector) || $detector = new $detector());
     }
 
-    public function createContainer(object $containerInstance = null): Container
+    public function createContainer(?object $containerInstance = null): Container
     {
         /** @var DetectorInterface $detector */
         foreach ($this->detectors as $adapter => $detector) {
