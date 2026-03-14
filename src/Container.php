@@ -35,9 +35,10 @@ class Container implements ContainerInterface
     /**
      * Find an entry in container.
      *
-     * @param string $id
+     * @template T
+     * @param string|class-string<T> $id
      * @param mixed ...$args
-     * @return mixed
+     * @return ($id is class-string<T> ? T : mixed)
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
@@ -90,10 +91,10 @@ class Container implements ContainerInterface
     /**
      * Get in instance of a class
      *
-     * @param string $className
+     * @template T
+     * @param string|class-string<T> $className
      * @param mixed ...$constructorArgs
-     *
-     * @return object
+     * @return T
      * @throws \Psr\Container\ContainerExceptionInterface
      */
     private function getInstance(string $className, mixed ...$constructorArgs): object
