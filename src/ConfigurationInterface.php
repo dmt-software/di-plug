@@ -18,5 +18,5 @@ interface ConfigurationInterface
     /**
      * Get a value from configuration.
      */
-    public function get(string $value, mixed $default = null): mixed;
+    public function get(string $option, mixed $default = null): mixed;
 }
