@@ -20,7 +20,7 @@ use RuntimeException;
 
 final class ContainerFactory
 {
-    private const DETECTORS = [
+    private const array DETECTORS = [
         AuraAdapter::class => AuraDetector::class,
         IlluminateAdapter::class => IlluminateDetector::class,
         LeagueAdapter::class => LeagueDetector::class,

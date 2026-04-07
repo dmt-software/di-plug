@@ -15,8 +15,8 @@ use Throwable;
  */
 final class NotFoundException extends InvalidArgumentException implements NotFoundExceptionInterface
 {
-    public static function throwException(string $key, Throwable $previous = null): void
+    public static function throwException(string $key, ?Throwable $previous = null): void
     {
-        throw new self(sprintf('container key `%s` not found', $key), 0, $previous);
+        throw new self(sprintf('container key `%s` not found', $key), previous: $previous);
     }
 }

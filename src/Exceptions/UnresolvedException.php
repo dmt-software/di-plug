@@ -15,8 +15,8 @@ use Throwable;
  */
 final class UnresolvedException extends RuntimeException implements ContainerExceptionInterface
 {
-    public static function throwException(string $key, Throwable $previous = null): void
+    public static function throwException(string $key, ?Throwable $previous = null): void
     {
-        throw new self(sprintf('error resolving `%s` with container', $key), 0, $previous);
+        throw new self(sprintf('error resolving `%s` with container', $key), previous: $previous);
     }
 }

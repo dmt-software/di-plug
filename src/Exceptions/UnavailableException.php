@@ -15,8 +15,8 @@ use Throwable;
  */
 final class UnavailableException extends InvalidArgumentException implements ContainerExceptionInterface
 {
-    public static function throwException(string $key, Throwable $previous = null): void
+    public static function throwException(string $key, ?Throwable $previous = null): void
     {
-        throw new self(sprintf('entry `%s` is not excepted by container', $key), 0, $previous);
+        throw new self(sprintf('entry `%s` is not excepted by container', $key), previous: $previous);
     }
 }
