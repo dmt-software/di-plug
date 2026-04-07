@@ -67,6 +67,26 @@ that class. This also counts for calls with made with constructor arguments.
 > NOTE: when the container creates a new instance it will NOT be set in the container.
 > Not even when it is called with the same constructor arguments.
 
+### Configuration Discovery
+
+When ConfigurationInterface is implemented and available in the container, the constructor arguments can be injected
+from the configuration using the `ConfigValue` attribute.
+
+```php
+use DMT\DependencyInjection\Attributes\ConfigValue;
+
+class Foo
+{
+    public function __construct(
+        #[ConfigValue('configKeyForBar')]
+        public string $bar,
+    )
+}
+```
+
+The value for the bar in the constructor is fetched from configuration when it is omitted from the `container::get` 
+call.
+
 ### Auto Inject Container
 
 Instead of injection all the dependencies, one can choose to inject just the container and resolve the dependencies when
