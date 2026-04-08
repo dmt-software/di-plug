@@ -194,7 +194,7 @@ class Container implements ContainerInterface
             return null;
         }
 
-        if (!class_exists($parameterType->getName())) {
+        if (!class_exists($parameterType->getName()) && !interface_exists($parameterType->getName())) {
             return null;
         }
 
