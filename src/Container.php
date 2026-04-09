@@ -194,11 +194,21 @@ class Container implements ContainerInterface
             return null;
         }
 
-        if (!class_exists($parameterType->getName()) && !interface_exists($parameterType->getName())) {
+        if ($parameterType->isBuiltin()) {
             return null;
         }
 
-        return $this->get($parameterType->getName());
+        $objectOrInterface = $parameterType->getName();
+
+        if (interface_exists($objectOrInterface) && !$this->has($objectOrInterface)) {
+            return null;
+        }
+
+        if (!class_exists($objectOrInterface)) {
+            return null;
+        }
+
+        return $this->get($objectOrInterface);
     }
 
     private function getValueFromParameterDefault(ReflectionParameter $parameter, array $constructorArgs): mixed
