@@ -200,8 +200,8 @@ class Container implements ContainerInterface
 
         $objectOrInterface = $parameterType->getName();
 
-        if (interface_exists($objectOrInterface) && !$this->has($objectOrInterface)) {
-            return null;
+        if (interface_exists($objectOrInterface) && $this->has($objectOrInterface)) {
+            return $this->get($objectOrInterface);
         }
 
         if (!class_exists($objectOrInterface)) {
