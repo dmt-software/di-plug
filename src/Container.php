@@ -108,7 +108,7 @@ class Container implements ContainerInterface
      * @return T
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    private function getInstance(string $className, mixed ...$constructorArgs): object
+    public function getInstance(string $className, mixed ...$constructorArgs): object
     {
         try {
             $class = new ReflectionClass($className);
