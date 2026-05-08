@@ -194,7 +194,7 @@ class Container implements ContainerInterface
             return null;
         }
 
-        if ($parameterType->isBuiltin()) {
+        if ($parameterType->isBuiltin() || $parameter->allowsNull()) {
             return null;
         }
 
